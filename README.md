@@ -1,23 +1,6 @@
 # kbn-authentication-plugin [![Build Status](https://travis-ci.org/codingchili/kbn-authentication-plugin.svg?branch=master)](https://travis-ci.org/codingchili/kbn-authentication-plugin)
 A plugin adds authentication to Kibana dashboards!
 
-
-#### Building the plugin
-To check out the sources and build the plugin do the following
-```
-git clone https://github.com/codingchili/kbn-authentication-plugin
-cd kbn-authentication-plugin
-npm install --arch=ia32
-mocha test --recursive -u tdd
-```
-Note: if you are on linux and running kibana using x64 you must omit the --arch flag.
-
-Perform the following steps to create an installable zip:
-1. Set the kibana version in package.json, must match exactly.
-1. move kbn-authentication-plugin into a folder named 'kibana'.
-2. Create a zip file that includes the 'kibana' folder.
-4. The plugin can then be installed with the kibana-plugin install command, see installing.
-
 ##### Dependencies
 
 - NodeJS 6.9.2+
@@ -34,10 +17,43 @@ unix:
 ```
 This installs MS build tools and python 2.7 and is required for node-gyp to work.
 
+#### Building the plugin
+To check out the sources and build the plugin do the following
+```
+git clone https://github.com/codingchili/kbn-authentication-plugin
+cd kbn-authentication-plugin
+```
+
+#### Linux/x64
+```
+npm install
+mocha test --recursive -u tdd
+```
+#### Linux/i386
+```
+npm install --arch=ia32
+mocha test --recursive -u tdd
+```
+### Packaging
+
+Perform the following steps to create an installable zip:
+1. Set the target $KIBANA_VERSION in package.json, must match exactly. Example: ```5.5.0```
+1. move kbn-authentication-plugin into a folder named 'kibana'.
+2. Create a zip file that includes the 'kibana' folder.
+4. The plugin can then be installed with the kibana-plugin install command, see installing.
+
+##### Example: 
+```
+sed -Ei "s/(\"version\":).*$/\1 \"5.5.0\"/" kbn-authentication-plugin/package.json
+mkdir kibana && mv kbn-authentication-plugin kibana/kbn-authentication-plugin
+zip -r kbn-authentication-plugin.zip kibana
+kibana-plugin install file:///path/to/kbn-authentication-plugin.zip
+```
+
 #### Installing
 To install the plugin use the kibana-plugin utility, example:
 ```
-./kibana-plugin install 'file:///C:/users/downloads/kbn-authentication-plugin.zip'
+./kibana-plugin install 'file:///path/to/kbn-authentication-plugin.zip'
 ```
 
 Default username and password is: 'username' and 'password' for the file storage.
